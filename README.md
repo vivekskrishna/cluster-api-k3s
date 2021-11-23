@@ -44,7 +44,7 @@ kubectl scale kthreescontrolplane ${CLUSTER_NAME}-control-plane --replicas 3
 * Post an issue!
 
 
-Steps to run it in a vspehre environgment(validated with tkg 1.3.1)
+Steps to run it in a VSphere environgment(validated with tkg 1.3.1)
 
 1. Create a tkg management cluster
 2. change the BOOTSTRAP_IMG and CONTROLPLANE_IMG in the Makefile to needed image name and then do
