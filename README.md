@@ -43,3 +43,22 @@ kubectl scale kthreescontrolplane ${CLUSTER_NAME}-control-plane --replicas 3
 * Setup CAPA and CAPV samples
 * Post an issue!
 
+
+Steps to run it in a vspehre environgment(validated with tkg 1.3.1)
+
+1. Create a tkg management cluster
+2. change the BOOTSTRAP_IMG and CONTROLPLANE_IMG in the Makefile to needed image name and then do
+  make docker-build-bootstrap
+  make docker-build-controlplane
+   and push the docker images to your repo.
+3. goto smaples/vsphere/ directory
+4. export CLUSTER_NAME=<> with your needed workload k3s cluster name
+5. cat k3s-template-master-only.yaml | envsubst > k3s-master-only.yaml
+6. cat k3s-template-master-only-addons.yaml | envsubst > k3s-master-only.yaml
+7. copy the  k3s-master-only.yaml and k3s-master-only.yaml to your tkg management cluster
+8. make changes in the yaml file with vsphere /nsx credentials etc and also vip needed for your cluster.
+8. kubectl create namespace ${CLUSTER_NAME} #same value as cluster name
+9. kubectl create -f k3s-master-only.yaml && kubectl create -f k3s-master-only.yaml
+10. after the ndoe is created, login using the credentials capv/VMware1! and run following command
+   sudo k3s kubectl label node --all node-role.kubernetes.io/master="" --overwrite=true
+   This step is needed for ccm to be installed using kapp so that node can be untainted and other compoennts/pods can be installed. so without this step, no pods will be run.
